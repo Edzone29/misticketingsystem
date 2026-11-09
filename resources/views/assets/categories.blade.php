@@ -1,0 +1,9 @@
+@extends('layouts.app')
+@section('title','Asset categories')
+@section('heading','Asset categories')
+@section('content')
+<div class="row g-4">
+    <div class="col-lg-4"><section class="panel"><div class="panel-header"><div><h2>Add category</h2><p>Keep the inventory classification consistent.</p></div></div><form class="panel-body pt-0" method="POST" action="{{ route('asset-categories.store') }}">@csrf<label class="form-label" for="category-name">Category name</label><input id="category-name" name="name" class="form-control mb-3" maxlength="120" required><button class="btn btn-primary">Add category</button></form></section></div>
+    <div class="col-lg-8"><section class="panel"><div class="panel-header"><div><h2>Inventory categories</h2><p>Deactivating a category keeps its asset history intact.</p></div></div><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Category</th><th>Assets</th><th>Status</th><th>Update</th></tr></thead><tbody>@forelse($categories as $category)<tr><td>{{ $category->name }}</td><td>{{ $category->assets_count }}</td><td>{{ $category->is_active ? 'Active' : 'Inactive' }}</td><td><form method="POST" action="{{ route('asset-categories.update',$category) }}" class="d-flex gap-2">@csrf @method('PUT')<input class="form-control form-control-sm" name="name" value="{{ $category->name }}" required maxlength="120"><select class="form-select form-select-sm" name="is_active"><option value="1" @selected($category->is_active)>Active</option><option value="0" @selected(!$category->is_active)>Inactive</option></select><button class="btn btn-sm btn-outline-primary">Save</button></form></td></tr>@empty<tr><td colspan="4"><div class="empty-state">No asset categories are configured.</div></td></tr>@endforelse</tbody></table></div></section></div>
+</div>
+@endsection
